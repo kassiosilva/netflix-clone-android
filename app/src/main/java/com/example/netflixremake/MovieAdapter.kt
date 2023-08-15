@@ -1,5 +1,6 @@
 package com.example.netflixremake
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,8 @@ import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netflixremake.model.Movie
+import com.example.netflixremake.util.DownloadImageTask
+import com.squareup.picasso.Picasso
 
 class MovieAdapter(
     private val movies: List<Movie>,
@@ -31,8 +34,11 @@ class MovieAdapter(
         fun bind(movie: Movie) {
             val imageCover: ImageView = itemView.findViewById(R.id.image_cover)
 
-            // TODO: aqui vai ser trocado por uma url que virá do servidor
-            // imageCover.setImageResource(movie.coverUrl)
+            DownloadImageTask(object : DownloadImageTask.Callback {
+                override fun onResult(bitmap: Bitmap) {
+                    imageCover.setImageBitmap(bitmap)
+                }
+            }).execute(movie.coverUrl)
         }
     }
 }
